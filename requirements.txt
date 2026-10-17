@@ -1,0 +1,13 @@
+pandas
+numpy
+yfinance
+fredapi
+scikit-learn
+scipy
+optuna
+plotly
+pyyaml
+joblib
+pyarrow
+requests
+tqdm
