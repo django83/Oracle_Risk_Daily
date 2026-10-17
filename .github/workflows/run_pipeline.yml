@@ -1,0 +1,34 @@
+name: Oracle Macro Daily Run
+
+on:
+  schedule:
+    - cron: '30 22 * * 1-5' # Du lundi au vendredi à 22h30 UTC (après la clôture US)
+  workflow_dispatch: # Permet de lancer le script à la main depuis l'onglet Actions sur GitHub
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+        cache: 'pip'
+
+    - name: Install dependencies
+      run: |
+        pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Run Pipeline
+      env:
+        FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+        FMP_API_KEY: ${{ secrets.FMP_API_KEY }}
+        EMAIL_USER: ${{ secrets.EMAIL_USER }}
+        EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+      run: |
+        python oracle_pipeline.py
